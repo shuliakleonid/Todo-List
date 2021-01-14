@@ -1,0 +1,10 @@
+.App {
+    padding: 30px;
+    display: flex;
+    background-color: aqua;
+}
+
+.App > div {
+    margin-right: 50px;
+    background-color: red;
+}
