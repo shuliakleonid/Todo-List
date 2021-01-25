@@ -1,0 +1,14 @@
+.active{
+    background-color: #2fff00;
+}
+.done{
+    list-style-type: none;
+    opacity: .4;
+}
+.error{
+    border: 2px solid red;
+}
+.message_error{
+    text-align: center;
+    color:silver;
+}
