@@ -36,10 +36,10 @@ const App = () => {
           {id: v1(), title: 'NodeJS', isDone: true}
         ],
         [todoListID2]: [
-          {id: v1(), title: 'Meat', isDone: true},
           {id: v1(), title: 'Milk', isDone: true},
           {id: v1(), title: 'Bear', isDone: false},
           {id: v1(), title: 'Bread', isDone: true},
+          {id: v1(), title: 'Meat', isDone: true},
           {id: v1(), title: 'Eggs', isDone: false},
           {id: v1(), title: 'Banana', isDone: true}
         ]
@@ -78,6 +78,8 @@ const App = () => {
       setTasks({...tasks})
     }
   }
+
+
   //   const newTask = tasks.map((i: TaskTypeProps) => {
   //     if (id === i.id) {
   //       return {...i, isDone: isDone}

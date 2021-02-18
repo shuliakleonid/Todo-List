@@ -3,7 +3,7 @@
 }
 .done{
     list-style-type: none;
-    opacity: .4;
+    opacity: .5;
 }
 .error{
     border: 2px solid red;

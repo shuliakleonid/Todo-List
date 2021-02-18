@@ -2,10 +2,10 @@
     display: flex;
     flex-wrap: wrap;
     padding: 30px;
-    background-color: aqua;
+    background-color: #7b9898;
 }
 
 .App > div {
     margin: 20px;
-    background-color: #8948b7;
+    background-color: #64eab1;
 }

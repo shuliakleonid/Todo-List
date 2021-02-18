@@ -3,6 +3,8 @@ import {FilterValueType} from '../app/App';
 import s from './todoList.module.css'
 import {AddItemForm} from '../add-item-form/AddItemForm';
 import {EditableSpan} from '../editable-span/EditableSpan';
+import {Button, Checkbox, IconButton, List, ListItem, ListItemIcon, ListItemText, Paper} from '@material-ui/core';
+import {Delete} from '@material-ui/icons';
 
 export type TaskType = {
   id: string
@@ -14,12 +16,12 @@ type TodoListPropsType = {
   title: string
   filter: FilterValueType
   tasks: Array<TaskType>
-  changeTodoListNewTitle:(id:string,newTitle:string)=>void
+  changeTodoListNewTitle: (id: string, newTitle: string) => void
   removeTodoList: (todoListID: string) => void
   remove: (id: string, todoListId: string) => void
   addTaskTodo: (value: string, todoListId: string) => void
   changeFilter: (value: FilterValueType, todoListId: string) => void
-  changeTaskTitle:(id:string,newValue:string,todoListId:string)=>void
+  changeTaskTitle: (id: string, newValue: string, todoListId: string) => void
   toggleCheckbox: (value: string, isDone: boolean, tdoListId: string) => void
 }
 const TodoList = (props: TodoListPropsType) => {
@@ -30,22 +32,8 @@ const TodoList = (props: TodoListPropsType) => {
   const buttonValue = (event: any) => {
     props.changeFilter(event.currentTarget.textContent, props.id)
   }
-  /*
-  const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    setValueTodo(event.target.value)
-    setError(null)
-  }
-  const onClickButtonAdd = () => {
-    if (valueTodo.trim()) {
-      props.addTaskTodo(valueTodo, props.id)
-      setValueTodo('')
-    } else {
-      setError('Error write name!')
-    }
-  }
-*/
-  const changeTodoListNewTitle =(title:string)=>{
-    props.changeTodoListNewTitle(props.id,title)
+  const changeTodoListNewTitle = (title: string) => {
+    props.changeTodoListNewTitle(props.id, title)
   }
   const addTask = (title: string): void => {
     props.addTaskTodo(title, props.id)
@@ -60,48 +48,50 @@ const TodoList = (props: TodoListPropsType) => {
     }
 
     const onChangeTitleHandler = (newValue: string): void => {
-      props.changeTaskTitle(t.id,newValue,props.id)
+      props.changeTaskTitle(t.id, newValue, props.id)
     }
 
     return (
-        <li key={t.id} className={t.isDone ? s.done : ''}>
-          <input type="checkbox"
-                 checked={t.isDone}
-                 onChange={onChangeCheckbox}
-          />
-          {/*<span>{t.title}</span>*/}
-          <EditableSpan title={t.title} onChange={onChangeTitleHandler}/>
-          <button onClick={removeHandler}> Button</button>
-        </li>
+        <ListItem key={t.id} className={t.isDone ? s.done : ''}>
+          <ListItemIcon>
+            <Checkbox color={'primary'}
+                      checked={t.isDone}
+                      onChange={onChangeCheckbox}/>
+            {/*<input type="checkbox"*/}
+            {/*       checked={t.isDone}*/}
+            {/*       onChange={onChangeCheckbox}*/}
+            {/*/>*/}
+            {/*<span>{t.title}</span>*/}
+          </ListItemIcon>
+          <ListItemText><EditableSpan title={t.title} onChange={onChangeTitleHandler}/></ListItemText>
+          <IconButton onClick={removeHandler}><Delete/></IconButton>
+          {/*<button onClick={removeHandler}> Button</button>*/}
+        </ListItem>
     )
   })
   return (
-      <div>
-        <h3><EditableSpan title={props.title} onChange={changeTodoListNewTitle}/>
+      <Paper>
+        <List>
+          <h3><EditableSpan title={props.title} onChange={changeTodoListNewTitle}/>
 
-          <button onClick={() => {
-            props.removeTodoList(props.id)
-          }}>x
-          </button>
-        </h3>
-        <AddItemForm addItem={addTask}/>
-        {/*<div>*/}
-        {/*  <input onChange={onChangeHandler}*/}
-        {/*         value={valueTodo}*/}
-        {/*         className={error ? s.error : ''}*/}
-        {/*         onBlur={() => {*/}
-        {/*           setError(null)*/}
-        {/*         }}*/}
-        {/*  />*/}
-        {/*  <button onClick={onClickButtonAdd}>+</button>*/}
-        {/*  {error && <div className={s.message_error}>{error}</div>}*/}
-        {/*</div>*/}
-        <ul>          {tasks}        </ul>
-        <button className={props.filter === 'all' ? s.active : ''} onClick={buttonValue}>all</button>
-        <button className={props.filter === 'active' ? s.active : ''} onClick={buttonValue}>active</button>
-        <button className={props.filter === 'completed' ? s.active : ''} onClick={buttonValue}>completed</button>
-      </div>
+            <IconButton onClick={() => {
+              props.removeTodoList(props.id)
+            }}><Delete/></IconButton>
+          </h3>
+          <AddItemForm addItem={addTask}/>
+          <ul>          {tasks}        </ul>
+          <Button variant="contained"
+                  color={props.filter === 'all' ? 'secondary' : 'primary'}
+                  onClick={buttonValue}>all</Button>
+          <Button variant="contained"
+                  color={props.filter === 'active' ? 'secondary' : 'primary'}
+                  onClick={buttonValue}>active</Button>
+          <Button variant="contained"
+                  color={props.filter === 'completed' ? 'secondary' : 'primary'}
+                  onClick={buttonValue}>completed</Button>
+        </List> </Paper>
   )
 }
 export default TodoList;
+
 
