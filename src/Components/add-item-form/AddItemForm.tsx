@@ -1,6 +1,5 @@
 import React, {ChangeEvent, useState} from 'react';
-import s from '../todo-list/todoList.module.css';
-import {IconButton} from '@material-ui/core';
+import {IconButton, TextField} from '@material-ui/core';
 import {AddBox} from '@material-ui/icons';
 
 type AddItemFormType = {
@@ -29,26 +28,29 @@ export const AddItemForm = (props: AddItemFormType) => {
     if (event.charCode === 13 && value !== '') {
       props.addItem(value)
       setValueTodo('')
-    }else{
+    } else {
       setError('Error write name!')
     }
   }
 
   return (
       <div>
-        <input value={valueTodo}
-               onChange={onChangeHandler}
-               className={error ? s.error : ''}
-               onKeyPress={onKeyPressHandler}
-               onBlur={() => {
-                 setError(null)
-               }}
+        <TextField value={valueTodo}
+                   onChange={onChangeHandler}
+            // className={error ? s.error : ''}
+                   onKeyPress={onKeyPressHandler}
+                   helperText={error && 'Write title'}
+                   label={"Title"}
+                   error={Boolean(error)}
+                   onBlur={() => {
+                     setError(null)
+                   }}
         />
         <IconButton onClick={onClickButtonAdd}>
           <AddBox/>
         </IconButton>
         {/*<button onClick={onClickButtonAdd}>+</button>*/}
-        {error && <div className={s.message_error}>{error}</div>}
+        {/*{error && <div className={s.message_error}>{error}</div>}*/}
       </div>
   )
 }
