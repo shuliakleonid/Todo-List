@@ -8,7 +8,7 @@ import {Menu} from '@material-ui/icons';
 
 export type FilterValueType = 'all' | 'active' | 'completed';
 
-type TodoListType = {
+export type TodoListType = {
   id: string
   title: string
   filter: FilterValueType
@@ -16,6 +16,8 @@ type TodoListType = {
 type TasksStateType = {
   [key: string]: Array<TaskType>
 }
+
+
 const App = () => {
   //BLL
   const todoListID1 = v1() // original id
@@ -47,6 +49,7 @@ const App = () => {
         ]
       },
   )
+
   const changeTodoListNewTitle = (id: string, newTitle: string) => {
     const todoList = todoLists.find(tl => tl.id === id)
     if (todoList) {
@@ -54,7 +57,6 @@ const App = () => {
       setTodoLists([...todoLists])
     }
   }
-
   const addTaskTodo = (value: string, todoListId: string): void => {
     const newTask = {id: v1(), title: value, isDone: false};
     const todoListTasks = tasks[todoListId]
@@ -80,38 +82,23 @@ const App = () => {
       setTasks({...tasks})
     }
   }
-
-
-  //   const newTask = tasks.map((i: TaskTypeProps) => {
-  //     if (id === i.id) {
-  //       return {...i, isDone: isDone}
-  //     }
-  //     return i
-  //   })
-  //   setTasks(newTask)
-  // }
-  // const [filter, setFilter] = useState<FilterValueType>('all')
-
-  function removeTask(id: string, todoListId: string) {
+  const removeTask = (id: string, todoListId: string) => {
     const todoListTasks = tasks[todoListId];
     tasks[todoListId] = todoListTasks.filter((item) => item.id !== id)
     setTasks({...tasks})
     // setTasks(tasks.filter((item) => item.id !== id))
   }
-
-  function changeFilter(newFilterValue: FilterValueType, todoListId: string) {
+  const changeFilter = (newFilterValue: FilterValueType, todoListId: string) => {
     const todoList = todoLists.find(tl => tl.id === todoListId)
     if (todoList) {
       todoList.filter = newFilterValue
       setTodoLists([...todoLists]);
     }
   }
-
   const removeTodoList = (todoListID: string) => {
     setTodoLists(todoLists.filter(tl => tl.id !== todoListID))
     delete tasks[todoListID]
   }
-
   const addTodoList = (title: string) => {
     let todoList: TodoListType = {
       id: v1(),
@@ -130,10 +117,10 @@ const App = () => {
       <div className="App">
         <AppBar position="static">
           <Toolbar>
-            <IconButton edge="start"  color="inherit" aria-label="menu">
-              <Menu />
+            <IconButton edge="start" color="inherit" aria-label="menu">
+              <Menu/>
             </IconButton>
-            <Typography variant="h3" >
+            <Typography variant="h3">
               Todo
             </Typography>
             <Button color="inherit">Login</Button>
@@ -141,11 +128,10 @@ const App = () => {
         </AppBar>
         <Container fixed>
 
-          <Grid container  style={{padding:'20px'}}>
+          <Grid container style={{padding: '20px'}}>
             <AddItemForm addItem={addTodoList}/>
           </Grid>
           <Grid container spacing={10}>
-
             {
               todoLists.map((t) => {
                 let tasksForTodoList = tasks[t.id]
@@ -157,10 +143,9 @@ const App = () => {
                 }
 
                 return (
-                    <Grid item  key={t.id}>
-                      <Paper >
+                    <Grid item key={t.id}>
+                      <Paper>
                         <TodoList
-
                             id={t.id}
                             title={t.title}
                             tasks={tasksForTodoList}

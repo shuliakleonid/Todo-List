@@ -25,10 +25,7 @@ type TodoListPropsType = {
   toggleCheckbox: (value: string, isDone: boolean, tdoListId: string) => void
 }
 const TodoList = (props: TodoListPropsType) => {
-  /*
-  const [valueTodo, setValueTodo] = useState('')
-  const [error, setError] = useState<string | null>(null)
-*/
+
   const buttonValue = (event: any) => {
     props.changeFilter(event.currentTarget.textContent, props.id)
   }
@@ -57,15 +54,10 @@ const TodoList = (props: TodoListPropsType) => {
             <Checkbox color={'primary'}
                       checked={t.isDone}
                       onChange={onChangeCheckbox}/>
-            {/*<input type="checkbox"*/}
-            {/*       checked={t.isDone}*/}
-            {/*       onChange={onChangeCheckbox}*/}
-            {/*/>*/}
-            {/*<span>{t.title}</span>*/}
+
           </ListItemIcon>
           <ListItemText><EditableSpan title={t.title} onChange={onChangeTitleHandler}/></ListItemText>
           <IconButton onClick={removeHandler}><Delete/></IconButton>
-          {/*<button onClick={removeHandler}> Button</button>*/}
         </ListItem>
     )
   })
@@ -73,7 +65,6 @@ const TodoList = (props: TodoListPropsType) => {
       <Paper>
         <List>
           <h3><EditableSpan title={props.title} onChange={changeTodoListNewTitle}/>
-
             <IconButton onClick={() => {
               props.removeTodoList(props.id)
             }}><Delete/></IconButton>
