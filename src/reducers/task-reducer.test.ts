@@ -1,7 +1,6 @@
 import {TasksStateType} from '../Components/app/App';
 import {
-  addTaskAC,
-  AddTodolistAC,
+  addTaskAC, addTodolistAC,
   changeTaskStatusAC,
   changeTaskTitleAC,
   removeTaskAC,
@@ -117,7 +116,7 @@ test('new array should be added when new todolist is added', () => {
     ]
   };
 
-  const action = AddTodolistAC("new todolist");
+  const action = addTodolistAC("new todolist");
 
   const endState = tasksReducer(startState, action)
 
@@ -128,5 +127,5 @@ test('new array should be added when new todolist is added', () => {
   }
 
   expect(keys.length).toBe(3);
-  expect(endState[newKey]).toEqual([]);
+  expect(endState[newKey]).toStrictEqual([]);
 });
