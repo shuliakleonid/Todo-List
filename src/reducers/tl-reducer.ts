@@ -29,9 +29,14 @@ export type ActionType =
     ReturnType<typeof addTodolistAC> |
     ReturnType<typeof changeFilterTodolistAC> |
     ReturnType<typeof changeTitleTodolistAC>
+export const todoListID1 = v1() // original id
+export const todoListID2 = v1()
+const initialState: Array<TodoListType> = [
+  {id: todoListID1, title: 'What to learn', filter: 'all'},
+  {id: todoListID2, title: 'What to buy', filter: 'all'}
+]
 
-
-export const todoListReducer = (state: Array<TodoListType>, action: ActionType):Array<TodoListType> => {
+export const todoListReducer = (state = initialState, action: ActionType): Array<TodoListType> => {
   switch (action.type) {
     case ACTIONS_TYPE.ADD_TODOLIST:
       const todoList: TodoListType = {id: action.todolistId, filter: 'all', title: action.title}
@@ -43,7 +48,8 @@ export const todoListReducer = (state: Array<TodoListType>, action: ActionType):
     case ACTIONS_TYPE.CHANGE_TITLE_TODOLIST:
       return state.map(tl => tl.id === action.todolistId ? {...tl, title: action.title} : tl)
     default:
-      throw new Error('I don\'t understand this type')
+      return state
+      // throw new Error('I don\'t understand this type')
   }
 }
 
@@ -51,7 +57,7 @@ export const todoListReducer = (state: Array<TodoListType>, action: ActionType):
 // создаем экшен криэйтор
 
 export const removeTodolistAC = (todolistId: string) => ({type: ACTIONS_TYPE.REMOVE_TODOLIST, id: todolistId}) as const
-export const addTodolistAC = (title: string) => ({type:ACTIONS_TYPE.ADD_TODOLIST,  title, todolistId:v1()}) as const
+export const addTodolistAC = (title: string) => ({type: ACTIONS_TYPE.ADD_TODOLIST, title, todolistId: v1()}) as const
 export const changeFilterTodolistAC = (todolistId: string, filter: FilterValueType) => ({
   type: ACTIONS_TYPE.CHANGE_FILTER_TODOLIST,
   todolistId,

@@ -5,6 +5,9 @@ import {AddItemForm} from '../add-item-form/AddItemForm';
 import {EditableSpan} from '../editable-span/EditableSpan';
 import {Button, Checkbox, IconButton, List, ListItem, ListItemIcon, ListItemText, Paper} from '@material-ui/core';
 import {Delete} from '@material-ui/icons';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppRootStateType} from '../../state/store';
+import {TodoListType} from '../app-withReducer/AppWithReducers';
 
 export type TaskType = {
   id: string
@@ -25,6 +28,11 @@ type TodoListPropsType = {
   toggleCheckbox: (value: string, isDone: boolean, tdoListId: string) => void
 }
 const TodoList = (props: TodoListPropsType) => {
+
+//   const todoList = useSelector<AppRootStateType,TodoListType>(state=>state.todolists.filter(todo=>todo.id===props.id)[0])
+// const tasksSelect = useSelector<AppRootStateType,Array<TaskType>>(state => state.tasks[props.id])
+//
+//   const dispatch = useDispatch()
 
   const buttonValue = (event: any) => {
     props.changeFilter(event.currentTarget.textContent, props.id)
@@ -56,8 +64,14 @@ const TodoList = (props: TodoListPropsType) => {
                       onChange={onChangeCheckbox}/>
 
           </ListItemIcon>
-          <ListItemText><EditableSpan title={t.title} onChange={onChangeTitleHandler}/></ListItemText>
-          <IconButton onClick={removeHandler}><Delete/></IconButton>
+          <ListItemText>
+            <EditableSpan
+                title={t.title}
+                onChange={onChangeTitleHandler}/>
+          </ListItemText>
+          <IconButton onClick={removeHandler}>
+            <Delete/>
+          </IconButton>
         </ListItem>
     )
   })

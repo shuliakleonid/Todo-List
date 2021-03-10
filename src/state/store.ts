@@ -1,4 +1,3 @@
-
 import {combineReducers, createStore} from 'redux';
 import {tasksReducer} from '../reducers/task-reducer';
 import {todoListReducer} from '../reducers/tl-reducer';
