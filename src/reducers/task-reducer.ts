@@ -1,14 +1,7 @@
 import {TasksStateType} from '../Components/app/App';
-import {
-  ADD_TASK,
-  ADD_TODOLIST,
-  CHANGE_STATUS_TASK,
-  CHANGE_TITLE_TASK,
-  REMOVE_TASK,
-  REMOVE_TODOLIST
-} from '../constants';
-import {v1} from 'uuid';
 import {addTodolistAC, removeTodolistAC} from './tl-reducer';
+import {ACTIONS_TYPE} from '../constants';
+
 
 export type ActionType =
     ReturnType<typeof addTaskAC> |
@@ -21,20 +14,20 @@ export type ActionType =
 
 export const tasksReducer = (state: TasksStateType, action: ActionType) => {
   switch (action.type) {
-    case REMOVE_TASK: {
+    case ACTIONS_TYPE.REMOVE_TASK: {
       const copyState = {...state}
       const todolistTask = state[action.todolistId]
       copyState[action.todolistId] = todolistTask.filter(t => t.id !== action.id)
       return copyState
     }
-    case ADD_TASK: {
+    case ACTIONS_TYPE.ADD_TASK: {
       const copyState = {...state}
       const task = {id: action.todolistId, title: action.title, isDone: false,}
       const todolistTask = state[action.todolistId]
       copyState[action.todolistId] = [task, ...todolistTask]
       return copyState
     }
-    case CHANGE_STATUS_TASK:
+    case ACTIONS_TYPE.CHANGE_STATUS_TASK:
       const copyState = {...state}
       const todolistTask = copyState[action.todolistId]
       // найдем нужную таску
@@ -50,7 +43,7 @@ export const tasksReducer = (state: TasksStateType, action: ActionType) => {
                 : {...el})
 
     }
-    case CHANGE_TITLE_TASK:
+    case ACTIONS_TYPE.CHANGE_TITLE_TASK:
       return {
         ...state, [action.todolistId]: state[action.todolistId]
             .map(el => el.id === action.id
@@ -58,10 +51,10 @@ export const tasksReducer = (state: TasksStateType, action: ActionType) => {
                 : {...el})
 
     }
-    case ADD_TODOLIST:{
+    case ACTIONS_TYPE.ADD_TODOLIST:{
      return {...state, [action.todolistId]:[]}
     }
-    case REMOVE_TODOLIST: {
+    case ACTIONS_TYPE.REMOVE_TODOLIST: {
     const copyState= {...state}
     delete copyState[action.id]
       return copyState
@@ -73,16 +66,16 @@ export const tasksReducer = (state: TasksStateType, action: ActionType) => {
 
 // создаем экшен криэйтор
 
-export const removeTaskAC = (id: string, todolistId: string,) => ({type: REMOVE_TASK, id, todolistId}) as const
-export const addTaskAC = (title: string, todolistId: string,) => ({type: ADD_TASK, title, todolistId:v1()}) as const
+export const removeTaskAC = (id: string, todolistId: string,) => ({type: ACTIONS_TYPE.REMOVE_TASK, id, todolistId}) as const
+export const addTaskAC = (title: string, todolistId: string,) => ({type: ACTIONS_TYPE.ADD_TASK, title, todolistId}) as const
 export const changeTaskStatusAC = (id: string, isDone: boolean, todolistId: string,) => ({
-  type: CHANGE_STATUS_TASK,
+  type: ACTIONS_TYPE.CHANGE_STATUS_TASK,
   id,
   isDone,
   todolistId
 }) as const
 export const changeTaskTitleAC = (id: string, title: string, todolistId: string,) => ({
-  type: CHANGE_TITLE_TASK,
+  type: ACTIONS_TYPE.CHANGE_TITLE_TASK,
   id,
   title,
   todolistId
