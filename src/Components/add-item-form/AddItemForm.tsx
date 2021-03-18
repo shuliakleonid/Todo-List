@@ -5,9 +5,11 @@ import {AddBox} from '@material-ui/icons';
 type AddItemFormType = {
   addItem: (value: string) => void
 }
-export const AddItemForm = (props: AddItemFormType) => {
+export const AddItemForm = React.memo( (props: AddItemFormType) => {
   const [valueTodo, setValueTodo] = useState('')
   const [error, setError] = useState<string | null>(null)
+
+  console.log('AddItemForm click')
 
   const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     setValueTodo(event.target.value)
@@ -23,7 +25,9 @@ export const AddItemForm = (props: AddItemFormType) => {
   }
 
   const onKeyPressHandler = (event: any): void => {//нужно исправить!!!!!
-    setError(null);
+    if(error !== null){
+          setError(null);
+    }
     const value = valueTodo.trim();
     if (event.charCode === 13 && value !== '') {
       props.addItem(value)
@@ -37,7 +41,6 @@ export const AddItemForm = (props: AddItemFormType) => {
       <div>
         <TextField value={valueTodo}
                    onChange={onChangeHandler}
-            // className={error ? s.error : ''}
                    onKeyPress={onKeyPressHandler}
                    helperText={error && 'Write title'}
                    label={"Title"}
@@ -49,8 +52,6 @@ export const AddItemForm = (props: AddItemFormType) => {
         <IconButton onClick={onClickButtonAdd}>
           <AddBox/>
         </IconButton>
-        {/*<button onClick={onClickButtonAdd}>+</button>*/}
-        {/*{error && <div className={s.message_error}>{error}</div>}*/}
       </div>
   )
-}
+})
