@@ -5,7 +5,7 @@ import {EditableSpan} from '../editable-span/EditableSpan';
 import {Delete} from '@material-ui/icons';
 import {TaskType} from './TodoList';
 
-type TaskPropsType = {
+export type TaskPropsType = {
   toggleCheckbox: (value: string, isDone: boolean, tdoListId: string) => void
   remove: (id: string, todoListId: string) => void
   changeTaskTitle: (id: string, newValue: string, todoListId: string) => void

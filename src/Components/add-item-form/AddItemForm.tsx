@@ -2,7 +2,7 @@ import React, {ChangeEvent, useState} from 'react';
 import {IconButton, TextField} from '@material-ui/core';
 import {AddBox} from '@material-ui/icons';
 
-type AddItemFormType = {
+export type AddItemFormType = {
   addItem: (value: string) => void
 }
 export const AddItemForm = React.memo( (props: AddItemFormType) => {
