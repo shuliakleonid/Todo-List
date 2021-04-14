@@ -1,44 +1,78 @@
-This project was bootstrapped with [Create React AppWithReducers](https://github.com/facebook/create-react-app).
+# Search-form (Clone Google Search)
+[![Todo-List](https://i.ibb.co/TTpqTtZ/TodoList.png)](https://shuliakleonid.github.io/TodoList/)
 
-## Available Scripts
+#### Description of your project
+This is clone of Google search with using Wikipedia API.
+#### __In this project I do:__
+- cover all code with tests
+- create custom hook
+- fetching data with REST from Wikipedia
+- use testing library
+## Table of content
 
-In the project directory, you can run:
+- [**Getting Started**](#getting-started)
+- [Built With](#built-with)
+- [Contributing](#contributing)
+- [Get Help](#get-help)
+- [Links](#links)
 
-### `yarn start`
+## Getting Started
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Install
+```console
+npm install 
+npm run
+```
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+### Usage
+Use API with all CRUD operation
+```javascript
+export const todoListsAPI = {
+  getTodoLists() {
+    return instance.get<Array<TodolistType>>('todo-lists').then(res => res.data)
+  },
+  createTodoLists(title: string) {
+    return instance.post<ResponseType<{ item: TodolistType }>>('todo-lists', {title}).then(res => res.data)
+  },
+  deleteTodoLists(titleId: string) {
+    return instance.delete<ResponseType<{}>>(`todo-lists/${titleId}`).then(res => res.data)
+  },
+  updateTodoLists(titleId: string, title: string) {
+    return instance.put<ResponseType<{}>>(`todo-lists/${titleId}`, {title}).then(res => res.data)
+  }
+}
+```
+## Built With
+- React
+- React Hooks 
+- Redux
+- Redux Thunk
+- Typescript
+- Axios
+- Storybook
+- Units tests
+- Jest testing
 
-### `yarn test`
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Contributing
 
-### `yarn build`
+#### Issues
+In the case of a bug report, bugfix or a suggestions, please feel very free to open an issue.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+#### Pull request
+Pull requests are always welcome, and I'll do my best to do reviews as fast as I can.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Get Help
+- Contact me on zeleny777@email.com
+- If appropriate, [open an issue](https://github.com/shuliakleonid/todoList/issues) on GitHub
 
-### `yarn eject`
+## Links
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Even though this information can be found inside the project on machine-readable
+format like in a .json file, it's good to include a summary of most useful
+links to humans using your project. You can include links like:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Project homepage: https://shuliakleonid.github.io/TodoList/
+- Repository:https://github.com/shuliakleonid/TodoList
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React AppWithReducers documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
