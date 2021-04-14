@@ -1,13 +1,14 @@
-# Search-form (Clone Google Search)
+# Todo List
 [![Todo-List](https://i.ibb.co/TTpqTtZ/TodoList.png)](https://shuliakleonid.github.io/TodoList/)
 
 #### Description of your project
-This is clone of Google search with using Wikipedia API.
+This is Todo App with login and API
 #### __In this project I do:__
-- cover all code with tests
-- create custom hook
-- fetching data with REST from Wikipedia
+- cover code with tests
+- use Storybook
+- fetching data with REST API
 - use testing library
+- build app with all CRUD operations
 ## Table of content
 
 - [**Getting Started**](#getting-started)
