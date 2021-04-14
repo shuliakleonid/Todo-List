@@ -61,12 +61,12 @@ export const todoListsAPI = {
 In the case of a bug report, bugfix or a suggestions, please feel very free to open an issue.
 
 #### Pull request
-Pull requests are always welcome, and I'll do my best to do reviews as fast as I can.
+Pull requests are always welcome, and I'll do my best to do review as fast as I can.
 
 
 ## Get Help
 - Contact me on zeleny777@email.com
-- If appropriate, [open an issue](https://github.com/shuliakleonid/todoList/issues) on GitHub
+- If appropriate, [open an issue](https://github.com/shuliakleonid/Todo-List/issues) on GitHub
 
 ## Links
 
@@ -74,6 +74,6 @@ Even though this information can be found inside the project on machine-readable
 format like in a .json file, it's good to include a summary of most useful
 links to humans using your project. You can include links like:
 
-- Project homepage: https://shuliakleonid.github.io/TodoList/
-- Repository:https://github.com/shuliakleonid/TodoList
+- Project homepage: https://shuliakleonid.github.io/Todo-List/
+- Repository:https://github.com/shuliakleonid/Todo-List
 
