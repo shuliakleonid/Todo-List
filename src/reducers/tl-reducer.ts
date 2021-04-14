@@ -1,4 +1,3 @@
-import {FilterValueType} from '../Components/app/App';
 import {v1} from 'uuid';
 import {ACTIONS_TYPE} from '../constants';
 import {AppThunk} from '../state/store';
@@ -29,7 +28,7 @@ export const todoListReducer = (state = initialState, action: TodoListActionType
           title: action.title,
           filter: 'all',
           addedDate: '',
-          order: 0
+          order: 0 // порядок листа в очереди
         }, ...state]
       }
     case ACTIONS_TYPE.REMOVE_TODOLIST:
@@ -48,7 +47,7 @@ export const todoListReducer = (state = initialState, action: TodoListActionType
 
 export const removeTodolistAC = (todolistId: string) => ({type: ACTIONS_TYPE.REMOVE_TODOLIST, id: todolistId}) as const
 export const addTodolistAC = (title: string) => ({type: ACTIONS_TYPE.ADD_TODOLIST, title, todolistId: v1()}) as const
-export const changeFilterTodolistAC = (todolistId: string, filter: FilterValueType) => ({
+export const changeFilterTodolistAC = (todolistId: string, filter: FilterValuesType) => ({
   type: ACTIONS_TYPE.CHANGE_FILTER_TODOLIST,
   todolistId,
   filter

@@ -1,18 +1,13 @@
+/*
 import React, {useState} from 'react';
 import './App.css';
-import TodoList, {TaskType} from '../todo-list/TodoList';
+import TodoList from '../todo-list/TodoList';
 import {v1} from 'uuid';
 import {AddItemForm} from '../add-item-form/AddItemForm';
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from '@material-ui/core';
 import {Menu} from '@material-ui/icons';
+import {TaskType} from '../../api/api';
 
-export type FilterValueType = 'all' | 'active' | 'completed';
-
-export type TodoListType = {
-  id: string
-  title: string
-  filter: FilterValueType
-}
 export type TasksStateType = {
   [key: string]: Array<TaskType>
 }
@@ -31,22 +26,6 @@ const App = () => {
 
   const [tasks, setTasks] = useState<TasksStateType>(
       {
-        [todoListID1]: [// arr with origin id
-          {id: v1(), title: 'HTML&CSS', isDone: true},
-          {id: v1(), title: 'JS', isDone: true},
-          {id: v1(), title: 'ReactJS', isDone: false},
-          {id: v1(), title: 'TS', isDone: true},
-          {id: v1(), title: 'Nest', isDone: false},
-          {id: v1(), title: 'NodeJS', isDone: true}
-        ],
-        [todoListID2]: [
-          {id: v1(), title: 'Milk', isDone: true},
-          {id: v1(), title: 'Bear', isDone: false},
-          {id: v1(), title: 'Bread', isDone: true},
-          {id: v1(), title: 'Meat', isDone: true},
-          {id: v1(), title: 'Eggs', isDone: false},
-          {id: v1(), title: 'Banana', isDone: true}
-        ]
       },
   )
 
@@ -173,3 +152,5 @@ const App = () => {
 
 
 export default App;
+*/
+export {}

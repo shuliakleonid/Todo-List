@@ -6,9 +6,11 @@ import {Provider} from 'react-redux';
 import {store} from './state/store'
 
 
-ReactDOM.render( <Provider store={store}>
-  <AppWithReducers/>
-</Provider>, document.getElementById('root'));
+ReactDOM.render(
+    <Provider store={store}>
+      <AppWithReducers/>
+    </Provider>,
+    document.getElementById('root'));
 
 
 

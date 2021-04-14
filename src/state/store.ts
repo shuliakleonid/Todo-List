@@ -17,7 +17,6 @@ export type AppRootStateType = ReturnType<typeof rootReducer>
 type ActionType = TodoListActionType | TaskActionType
 //типизация санок
 export type AppThunk = ThunkAction<void, AppRootStateType, unknown, ActionType>
-
 // а это, чтобы можно было в консоли браузера обращаться к store в любой момент
 // @ts-ignore
 window.store = store;
