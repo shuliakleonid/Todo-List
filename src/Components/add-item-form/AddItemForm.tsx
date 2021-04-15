@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent,KeyboardEvent, useState} from 'react';
 import {IconButton, TextField} from '@material-ui/core';
 import {AddBox} from '@material-ui/icons';
 
@@ -9,7 +9,6 @@ export const AddItemForm = React.memo( (props: AddItemFormType) => {
   const [valueTodo, setValueTodo] = useState('')
   const [error, setError] = useState<string | null>(null)
 
-  console.log('AddItemForm click')
 
   const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     setValueTodo(event.target.value)
@@ -24,7 +23,7 @@ export const AddItemForm = React.memo( (props: AddItemFormType) => {
     }
   }
 
-  const onKeyPressHandler = (event: any): void => {//нужно исправить!!!!!
+  const onKeyPressHandler = (event:KeyboardEvent<HTMLInputElement>): void => {
     if(error !== null){
           setError(null);
     }

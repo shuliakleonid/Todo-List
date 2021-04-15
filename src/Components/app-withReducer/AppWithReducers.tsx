@@ -4,11 +4,11 @@ import {AddItemForm} from '../add-item-form/AddItemForm';
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from '@material-ui/core';
 import {Menu} from '@material-ui/icons';
 import {
-  addTodoList, changeFilterTodolistAC,
+  addTodoList,
+  changeFilterTodolistAC,
   changeTitleTodolistAC,
   fetchTodoListsThunk,
   FilterValuesType,
-  removeTodolistAC,
   TodolistDomainType
 } from '../../reducers/tl-reducer';
 import {changeTaskTitleAC, removeTaskAC, setTask, updateStatusTask} from '../../reducers/task-reducer';
@@ -16,14 +16,12 @@ import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../../state/store';
 import {TaskStatuses, TaskType} from '../../api/api';
 
-export type TasksStateType = {  [key: string]: Array<TaskType>}
+export type TasksStateType = { [key: string]: Array<TaskType> }
 
 export const AppWithReducers = () => {
-
   const todoLists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todoLists)
   const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
   const dispatch = useDispatch()
-
 
   useEffect(() => {
     dispatch(fetchTodoListsThunk())
@@ -47,13 +45,9 @@ export const AppWithReducers = () => {
   const changeFilter = useCallback((value: FilterValuesType, todolistId: string) => {
     dispatch(changeFilterTodolistAC(todolistId, value))
   }, [dispatch])
-  // const removeTodoList = useCallback((todoListID: string) => {
-  //   dispatch(removeTodolistAC(todoListID))
-  // }, [dispatch])
   const addTodoListClick = useCallback((title: string) => {
     dispatch(addTodoList(title))
   }, [dispatch])
-
 
   return (
       <div className="App">
@@ -69,7 +63,6 @@ export const AppWithReducers = () => {
           </Toolbar>
         </AppBar>
         <Container fixed>
-
           <Grid container style={{padding: '20px'}}>
             <AddItemForm addItem={addTodoListClick}/>
           </Grid>
@@ -77,7 +70,6 @@ export const AppWithReducers = () => {
             {
               todoLists.map((t) => {
                 let tasksForTodoList = tasks[t.id]
-
                 return (
                     <Grid item key={t.id}>
                       <Paper>
@@ -90,7 +82,6 @@ export const AppWithReducers = () => {
                             tasks={tasksForTodoList}
                             changeFilter={changeFilter}
                             changeTaskStatus={changeStatus}
-                            // removeTodoList={removeTodoList}
                             changeTaskTitle={changeTaskTitle}
                             changeTodoListNewTitle={changeTodoListNewTitle}
                         />
@@ -101,7 +92,6 @@ export const AppWithReducers = () => {
             }
           </Grid>
         </Container>
-
       </div>
   )
 }

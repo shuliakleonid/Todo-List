@@ -46,8 +46,8 @@ export const tasksReducer = (state = initialState, action: TaskActionType): Task
     }
     case ACTIONS_TYPE.CHANGE_STATUS_TASK: {
       let todolistTasks = state[action.todolistId];
-      debugger
-      let newTasksArray:Array<TaskType> = todolistTasks
+
+      let newTasksArray: Array<TaskType> = todolistTasks
           .map(t => t.id === action.taskId ? {...t, status: action.status} : t);
 
       state[action.todolistId] = newTasksArray;
@@ -82,11 +82,11 @@ export const removeTaskAC = (todolistId: string, id: string) => ({
   todolistId
 }) as const
 export const addTaskAC = (task: TaskType) => ({
-  type: ACTIONS_TYPE.ADD_TASK,payload:task
+  type: ACTIONS_TYPE.ADD_TASK, payload: task
 }) as const
 export const changeTaskStatusAC = (status: TaskStatuses, todolistId: string, taskId: string,) => ({
   type: ACTIONS_TYPE.CHANGE_STATUS_TASK
-    , status, todolistId, taskId
+  , status, todolistId, taskId
 }) as const
 export const changeTaskTitleAC = (id: string, title: string, todolistId: string,) => ({
   type: ACTIONS_TYPE.CHANGE_TITLE_TASK,
@@ -99,37 +99,57 @@ export const setTaskAC = (task: Array<TaskType>, todoId: string) => {
 }
 
 
-export const fetchTaskThunk = (todoId: string): AppThunk => (dispatch) => {
-  debugger
-  todoListsAPI.getTasks(todoId).then((data) => dispatch(setTaskAC(data.items, todoId)))
-}
-export const setRemoveTask = (todoID: string, taskId: string): AppThunk => (dispatch) => {
-  todoListsAPI.deleteTask(todoID, taskId)
-      .then((res) => {
-        dispatch(removeTaskAC(todoID, taskId))
-      })
-}
-export const setTask = (todoID: string, title: string): AppThunk => (dispatch) => {
-  todoListsAPI.createTask(todoID, title)
-      .then((res) => {
-        dispatch(addTaskAC((res.data.item)))
-      })
-}
-export const updateStatusTask = (todoID: string, taskId: string, status: TaskStatuses): AppThunk => (dispatch, getState: () => AppRootStateType) => {
-  const state = getState()
-  const allAppTasks = state.tasks
-  const forCurrentTodoID = allAppTasks[todoID]
-  const currentTask = forCurrentTodoID.find((t) => t.id === taskId)
+export const fetchTaskThunk = (todoId: string): AppThunk =>
+    async (dispatch) => {
+      try {
 
-  if (currentTask) {
-    const model: UpdateTaskModelType = {
-      title: currentTask.title,
-      description: currentTask.description,
-      status: status,
-      priority: currentTask.priority,
-      startDate: currentTask.startDate,
-      deadline: currentTask.deadline,
+        const tasks = await todoListsAPI.getTasks(todoId)
+        dispatch(setTaskAC(tasks.items, todoId))
+      } catch (e) {
+        console.warn(e)
+      }
     }
-    todoListsAPI.updateTask(todoID, taskId, model).then(res => dispatch(changeTaskStatusAC(status, todoID, taskId)))
-  }
-}
+export const setRemoveTask = (todoID: string, taskId: string): AppThunk =>
+    async (dispatch) => {
+      try {
+        await todoListsAPI.deleteTask(todoID, taskId)
+        dispatch(removeTaskAC(todoID, taskId))
+
+      } catch (e) {
+        console.warn(e)
+      }
+    }
+export const setTask = (todoID: string, title: string): AppThunk =>
+    async (dispatch) => {
+      try {
+        const task = await todoListsAPI.createTask(todoID, title)
+        debugger
+        dispatch(addTaskAC((task.data.item)))
+      } catch (e) {
+        console.warn(e)
+      }
+    }
+export const updateStatusTask = (todoID: string, taskId: string, status: TaskStatuses): AppThunk =>
+    async (dispatch, getState: () => AppRootStateType) => {
+      const state = getState()
+      const allAppTasks = state.tasks
+      const forCurrentTodoID = allAppTasks[todoID]
+      const currentTask = forCurrentTodoID.find((t) => t.id === taskId)
+
+      if (currentTask) {
+        const model: UpdateTaskModelType = {
+          title: currentTask.title,
+          description: currentTask.description,
+          status: status,
+          priority: currentTask.priority,
+          startDate: currentTask.startDate,
+          deadline: currentTask.deadline,
+        }
+        try {
+          await todoListsAPI.updateTask(todoID, taskId, model)
+          dispatch(changeTaskStatusAC(status, todoID, taskId))
+        } catch (e) {
+          console.warn(e)
+        }
+      }
+    }

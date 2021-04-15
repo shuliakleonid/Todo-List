@@ -15,7 +15,6 @@ type TodoListPropsType = {
   title: string
   tasks: Array<TaskType>
   filter: FilterValuesType
-  // removeTodoList: (todoListID: string) => void
   remove: (id: string, todoListId: string) => void
   addTask: (value: string, todoListId: string) => void
   changeTodoListNewTitle: (id: string, newTitle: string) => void
@@ -29,7 +28,7 @@ const TodoList = React.memo((props: TodoListPropsType) => {
 
   useEffect(()=>{
     dispatch(fetchTaskThunk(props.id))
-  },[])
+  },[dispatch,props.id])
 
 
   let tasksForTodoList = props.tasks
@@ -41,17 +40,16 @@ const TodoList = React.memo((props: TodoListPropsType) => {
   }
 
   const buttonValue = useCallback((event: any) => {
-    console.log(event.currentTarget.textContent)
     props.changeFilter(event.currentTarget.textContent, props.id)
   }, [props])
 
   const changeTodoListNewTitle =  useCallback((title: string) => {
     dispatch(updateTodoList(props.id, title))
-  }, [props.id, props.changeTodoListNewTitle])
+  }, [props.id,dispatch])
 
   const addTask = useCallback((title: string) => {
     dispatch(setTask(props.id, title))
-  }, [props.addTask, props.id])
+  }, [props.id,dispatch])
 
   const removeTodolist = () => {
     dispatch(setRemoveTodoList(props.id))
@@ -60,7 +58,6 @@ const TodoList = React.memo((props: TodoListPropsType) => {
   const tasks = tasksForTodoList.map(task => <Task
       key={v1()}
       task={task}
-      // remove={props.remove}
       todoListId={props.id}
       changeTaskStatus={props.changeTaskStatus}
       changeTaskTitle={props.changeTaskTitle}
