@@ -7,7 +7,7 @@ import {
 } from './task-reducer';
 import {addTodolistAC} from './tl-reducer';
 import {TaskPriorities, TaskStatuses} from '../api/api';
-import {TasksStateType} from '../Components/app-withReducer/AppWithReducers';
+import {TasksStateType} from '../pages/dashboard/Dashboard';
 
 let startState:TasksStateType
 beforeEach(()=>{

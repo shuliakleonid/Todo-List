@@ -2,8 +2,14 @@ import {addTodolistAC, removeTodolistAC, setTodoListsAC} from './tl-reducer';
 import {ACTIONS_TYPE} from '../constants';
 import {TaskStatuses, TaskType, todoListsAPI, UpdateTaskModelType} from '../api/api';
 import {AppRootStateType, AppThunk} from '../state/store';
-import {TasksStateType} from '../Components/app-withReducer/AppWithReducers';
+import {TasksStateType} from '../pages/dashboard/Dashboard';
+import {setAppStatus, setError} from './app-reducer';
 
+export enum ResultResponseCodes {
+  success = 0,
+  failed = 1,
+  captcha = 10
+}
 
 export type TaskActionType =
     ReturnType<typeof addTaskAC>
@@ -102,9 +108,11 @@ export const setTaskAC = (task: Array<TaskType>, todoId: string) => {
 export const fetchTaskThunk = (todoId: string): AppThunk =>
     async (dispatch) => {
       try {
-
+        dispatch(setAppStatus('loading'))
         const tasks = await todoListsAPI.getTasks(todoId)
         dispatch(setTaskAC(tasks.items, todoId))
+        dispatch(setAppStatus('succeeded'))
+
       } catch (e) {
         console.warn(e)
       }
@@ -112,8 +120,10 @@ export const fetchTaskThunk = (todoId: string): AppThunk =>
 export const setRemoveTask = (todoID: string, taskId: string): AppThunk =>
     async (dispatch) => {
       try {
+        dispatch(setAppStatus('loading'))
         await todoListsAPI.deleteTask(todoID, taskId)
         dispatch(removeTaskAC(todoID, taskId))
+        dispatch(setAppStatus('succeeded'))
 
       } catch (e) {
         console.warn(e)
@@ -122,11 +132,24 @@ export const setRemoveTask = (todoID: string, taskId: string): AppThunk =>
 export const setTask = (todoID: string, title: string): AppThunk =>
     async (dispatch) => {
       try {
+        dispatch(setAppStatus('loading'))
         const task = await todoListsAPI.createTask(todoID, title)
         debugger
-        dispatch(addTaskAC((task.data.item)))
-      } catch (e) {
-        console.warn(e)
+        if (task.resultCode === ResultResponseCodes.success) {
+          dispatch(addTaskAC((task.data.item)))
+          // dispatch(setAppStatus('succeeded'))
+        } else {
+          if (task.messages.length) {
+            dispatch(setError(task.messages[0]))
+          } else {
+            dispatch(setError('Some error occurred'))
+          }
+        }
+      } catch (err) {
+        dispatch(setError(err.message))
+        // console.warn(e)
+      } finally {
+        dispatch(setAppStatus('succeeded'))
       }
     }
 export const updateStatusTask = (todoID: string, taskId: string, status: TaskStatuses): AppThunk =>
@@ -146,8 +169,11 @@ export const updateStatusTask = (todoID: string, taskId: string, status: TaskSta
           deadline: currentTask.deadline,
         }
         try {
+          dispatch(setAppStatus('loading'))
           await todoListsAPI.updateTask(todoID, taskId, model)
           dispatch(changeTaskStatusAC(status, todoID, taskId))
+          dispatch(setAppStatus('succeeded'))
+
         } catch (e) {
           console.warn(e)
         }

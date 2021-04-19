@@ -1,3 +1,4 @@
+/*
 import React from 'react';
 import {Provider} from 'react-redux';
 import {AppRootStateType} from '../state/store';
@@ -6,11 +7,13 @@ import {v1} from 'uuid'
 import {tasksReducer} from '../reducers/task-reducer';
 import {todoListReducer} from '../reducers/tl-reducer';
 import {TaskPriorities, TaskStatuses} from '../api/api';
+import {appReducer} from '../reducers/app-reducer';
 
 
 const rootReducer = combineReducers({
   tasks: tasksReducer,
-  todoLists: todoListReducer
+  todoLists: todoListReducer,
+  app: appReducer
 })
 
 const initialGlobalState = {
@@ -81,3 +84,5 @@ export const ReduxStoreProviderDecorator = (storyFn: () => React.ReactNode) => (
         store={storyBookStore}>{storyFn()}
     </Provider>)
 
+*/
+export {}

@@ -9,12 +9,14 @@ import {TaskStatuses, TaskType} from '../../api/api';
 import {useDispatch} from 'react-redux';
 import {FilterValuesType, setRemoveTodoList, updateTodoList} from '../../reducers/tl-reducer';
 import {fetchTaskThunk, setTask} from '../../reducers/task-reducer';
+import {RequestStatusType} from '../../reducers/app-reducer';
 
 type TodoListPropsType = {
   id: string
   title: string
   tasks: Array<TaskType>
   filter: FilterValuesType
+  enentityStatus: RequestStatusType
   remove: (id: string, todoListId: string) => void
   addTask: (value: string, todoListId: string) => void
   changeTodoListNewTitle: (id: string, newTitle: string) => void
@@ -26,9 +28,9 @@ type TodoListPropsType = {
 const TodoList = React.memo((props: TodoListPropsType) => {
   const dispatch = useDispatch()
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(fetchTaskThunk(props.id))
-  },[dispatch,props.id])
+  }, [dispatch, props.id])
 
 
   let tasksForTodoList = props.tasks
@@ -43,13 +45,13 @@ const TodoList = React.memo((props: TodoListPropsType) => {
     props.changeFilter(event.currentTarget.textContent, props.id)
   }, [props])
 
-  const changeTodoListNewTitle =  useCallback((title: string) => {
+  const changeTodoListNewTitle = useCallback((title: string) => {
     dispatch(updateTodoList(props.id, title))
-  }, [props.id,dispatch])
+  }, [props.id, dispatch])
 
   const addTask = useCallback((title: string) => {
     dispatch(setTask(props.id, title))
-  }, [props.id,dispatch])
+  }, [props.id, dispatch])
 
   const removeTodolist = () => {
     dispatch(setRemoveTodoList(props.id))
@@ -67,9 +69,13 @@ const TodoList = React.memo((props: TodoListPropsType) => {
         <List>
           <h3>
             <EditableSpan title={props.title} onChange={changeTodoListNewTitle}/>
-            <IconButton onClick={removeTodolist}><Delete/></IconButton>
+            <IconButton
+                onClick={removeTodolist}
+                disabled={props.enentityStatus === 'loading'}>
+              <Delete/>
+            </IconButton>
           </h3>
-          <AddItemForm addItem={addTask}/>
+          <AddItemForm addItem={addTask} disabled={props.enentityStatus === 'loading'}/>
           <ul>
             {tasks}
           </ul>

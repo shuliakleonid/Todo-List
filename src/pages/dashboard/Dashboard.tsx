@@ -1,7 +1,17 @@
 import React, {useCallback, useEffect} from 'react';
-import TodoList from '../todo-list/TodoList';
-import {AddItemForm} from '../add-item-form/AddItemForm';
-import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from '@material-ui/core';
+import TodoList from '../../Components/todo-list/TodoList';
+import {AddItemForm} from '../../Components/add-item-form/AddItemForm';
+import {
+  AppBar,
+  Button,
+  Container,
+  Grid,
+  IconButton,
+  LinearProgress,
+  Paper,
+  Toolbar,
+  Typography
+} from '@material-ui/core';
 import {Menu} from '@material-ui/icons';
 import {
   addTodoList,
@@ -15,14 +25,17 @@ import {changeTaskTitleAC, removeTaskAC, setTask, updateStatusTask} from '../../
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../../state/store';
 import {TaskStatuses, TaskType} from '../../api/api';
+import {AppStateType} from '../../reducers/app-reducer';
+import {ErrorSnackbar} from '../../Components/error-snackbars/ErrorSnackbar';
+import {NavLink} from 'react-router-dom';
 
 export type TasksStateType = { [key: string]: Array<TaskType> }
 
-export const AppWithReducers = () => {
+export const Dashboard = () => {
   const todoLists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todoLists)
   const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
+  const {status} = useSelector<AppRootStateType, AppStateType>(state => state.app)
   const dispatch = useDispatch()
-
   useEffect(() => {
     dispatch(fetchTodoListsThunk())
   }, [dispatch])
@@ -51,7 +64,9 @@ export const AppWithReducers = () => {
 
   return (
       <div className="App">
+          <ErrorSnackbar/>
         <AppBar position="static">
+          {status === 'loading' && <LinearProgress color="secondary"/>}
           <Toolbar>
             <IconButton edge="start" color="inherit" aria-label="menu">
               <Menu/>
@@ -59,7 +74,7 @@ export const AppWithReducers = () => {
             <Typography variant="h3">
               Todo
             </Typography>
-            <Button color="inherit">Login</Button>
+            <Button color="inherit"><NavLink to="/login" >Login</NavLink></Button>
           </Toolbar>
         </AppBar>
         <Container fixed>
@@ -77,6 +92,7 @@ export const AppWithReducers = () => {
                             id={t.id}
                             title={t.title}
                             filter={t.filter}
+                            enentityStatus={t.entityStatus}
                             addTask={addTask}
                             remove={removeTask}
                             tasks={tasksForTodoList}

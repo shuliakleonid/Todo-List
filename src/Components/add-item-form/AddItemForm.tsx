@@ -1,11 +1,12 @@
-import React, {ChangeEvent,KeyboardEvent, useState} from 'react';
+import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import {IconButton, TextField} from '@material-ui/core';
 import {AddBox} from '@material-ui/icons';
 
 export type AddItemFormType = {
   addItem: (value: string) => void
+  disabled?: boolean
 }
-export const AddItemForm = React.memo( (props: AddItemFormType) => {
+export const AddItemForm = React.memo((props: AddItemFormType) => {
   const [valueTodo, setValueTodo] = useState('')
   const [error, setError] = useState<string | null>(null)
 
@@ -23,9 +24,9 @@ export const AddItemForm = React.memo( (props: AddItemFormType) => {
     }
   }
 
-  const onKeyPressHandler = (event:KeyboardEvent<HTMLInputElement>): void => {
-    if(error !== null){
-          setError(null);
+  const onKeyPressHandler = (event: KeyboardEvent<HTMLInputElement>): void => {
+    if (error !== null) {
+      setError(null);
     }
     const value = valueTodo.trim();
     if (event.charCode === 13 && value !== '') {
@@ -39,16 +40,17 @@ export const AddItemForm = React.memo( (props: AddItemFormType) => {
   return (
       <div>
         <TextField value={valueTodo}
+                   disabled={props.disabled}
                    onChange={onChangeHandler}
                    onKeyPress={onKeyPressHandler}
                    helperText={error && 'Write title'}
-                   label={"Title"}
+                   label={'Title'}
                    error={Boolean(error)}
                    onBlur={() => {
                      setError(null)
                    }}
         />
-        <IconButton onClick={onClickButtonAdd}>
+        <IconButton onClick={onClickButtonAdd} disabled={props.disabled}>
           <AddBox/>
         </IconButton>
       </div>
