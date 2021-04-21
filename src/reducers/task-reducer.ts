@@ -1,4 +1,4 @@
-import {addTodolistAC, removeTodolistAC, setTodoListsAC} from './tl-reducer';
+import {addTodolistAC, changeTodolistEntityStatus, removeTodolistAC, setTodoListsAC} from './tl-reducer';
 import {ACTIONS_TYPE} from '../constants';
 import {TaskStatuses, TaskType, todoListsAPI, UpdateTaskModelType} from '../api/api';
 import {AppRootStateType, AppThunk} from '../state/store';
@@ -123,10 +123,10 @@ export const setRemoveTask = (todoID: string, taskId: string): AppThunk =>
         dispatch(setAppStatus('loading'))
         await todoListsAPI.deleteTask(todoID, taskId)
         dispatch(removeTaskAC(todoID, taskId))
-        dispatch(setAppStatus('succeeded'))
-
       } catch (e) {
         console.warn(e)
+      }finally {
+        dispatch(setAppStatus('succeeded'))
       }
     }
 export const setTask = (todoID: string, title: string): AppThunk =>

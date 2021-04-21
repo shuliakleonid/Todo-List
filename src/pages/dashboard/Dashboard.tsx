@@ -3,7 +3,7 @@ import TodoList from '../../Components/todo-list/TodoList';
 import {AddItemForm} from '../../Components/add-item-form/AddItemForm';
 import {
   AppBar,
-  Button,
+  Button, CircularProgress,
   Container,
   Grid,
   IconButton,
@@ -27,7 +27,8 @@ import {AppRootStateType} from '../../state/store';
 import {TaskStatuses, TaskType} from '../../api/api';
 import {AppStateType} from '../../reducers/app-reducer';
 import {ErrorSnackbar} from '../../Components/error-snackbars/ErrorSnackbar';
-import {NavLink} from 'react-router-dom';
+import {NavLink, Redirect} from 'react-router-dom';
+import {AuthStateType, initializeApp, setIsLoggedIn} from '../../reducers/auth-reducer';
 
 export type TasksStateType = { [key: string]: Array<TaskType> }
 
@@ -35,14 +36,22 @@ export const Dashboard = () => {
   const todoLists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todoLists)
   const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
   const {status} = useSelector<AppRootStateType, AppStateType>(state => state.app)
+  const {isLoggedIn,isInitialized} = useSelector<AppRootStateType, AuthStateType>(state => state.auth)
   const dispatch = useDispatch()
+
   useEffect(() => {
+    dispatch(initializeApp())
     dispatch(fetchTodoListsThunk())
-  }, [dispatch])
+    if (!isLoggedIn) {
+      return
+    }
+  }, [dispatch,isLoggedIn])
 
   const changeTodoListNewTitle = useCallback((todolistId: string, title: string) => {
     dispatch(changeTitleTodolistAC(todolistId, title))
   }, [dispatch])
+
+
   const addTask = useCallback((title: string, todoListId: string): void => {
     dispatch(setTask(title, todoListId))
   }, [dispatch])
@@ -62,9 +71,23 @@ export const Dashboard = () => {
     dispatch(addTodoList(title))
   }, [dispatch])
 
+  const handleLogOut = () => {
+    dispatch(setIsLoggedIn(false))
+  }
+
+  if (!isLoggedIn) {
+    return <Redirect to={'/login'}/>
+  }
+  if (!isInitialized) {
+    return <div
+        style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
+      <CircularProgress/>
+    </div>
+  }
+
   return (
       <div className="App">
-          <ErrorSnackbar/>
+        <ErrorSnackbar/>
         <AppBar position="static">
           {status === 'loading' && <LinearProgress color="secondary"/>}
           <Toolbar>
@@ -74,7 +97,7 @@ export const Dashboard = () => {
             <Typography variant="h3">
               Todo
             </Typography>
-            <Button color="inherit"><NavLink to="/login" >Login</NavLink></Button>
+            <Button onClick={handleLogOut} color="inherit"><NavLink to="/login">Login</NavLink></Button>
           </Toolbar>
         </AppBar>
         <Container fixed>

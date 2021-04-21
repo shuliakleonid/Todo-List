@@ -7,6 +7,10 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import {useFormik} from 'formik';
+import {login} from '../../reducers/auth-reducer';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppRootStateType} from '../../state/store';
+import { Redirect } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -27,18 +31,17 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
 }));
+
 type FormikErrorType = {
   email?: string
   password?: string
   rememberMe?: boolean
 }
 
-
 export const Login = () => {
   const classes = useStyles();
-
-
-
+const dispatch = useDispatch()
+const isLoggedIn = useSelector<AppRootStateType,boolean>(state=>state.auth.isLoggedIn)
 
   const {handleChange, handleSubmit,handleBlur, values,errors,touched,resetForm} = useFormik({
     initialValues: {
@@ -60,17 +63,18 @@ export const Login = () => {
       }
       return errors;
     },
-
     onSubmit: values => {
       resetForm()
-      alert(JSON.stringify(values))
-
+      dispatch(login(values))
     }
   })
+
   const errorEmail = !!(touched.email && errors.email)
   const errorPassword = !!(touched.password && errors.password)
-  console.log(touched,'PASSWORD')
-  // console.log(errorEmail,'EMAIL')
+
+if (isLoggedIn){
+ return  <Redirect to={'/'}/>
+}
   return (
       <Container component="main" maxWidth="xs">
         <CssBaseline/>
@@ -115,7 +119,7 @@ export const Login = () => {
                 fullWidth
             />
             <FormControlLabel
-                control={<Checkbox value="remember" color="primary"/>}
+                control={<Checkbox  name="rememberMe" value={values.rememberMe} onChange={handleChange} color="primary"/>}
                 label="Remember me"
             />
             <Button

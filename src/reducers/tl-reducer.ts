@@ -3,6 +3,7 @@ import {ACTIONS_TYPE} from '../constants';
 import {AppThunk} from '../state/store';
 import {todoListsAPI, TodolistType} from '../api/api';
 import {RequestStatusType, setAppStatus, setError} from './app-reducer';
+import {fetchTaskThunk} from './task-reducer';
 
 export type TodoListActionType =
     ReturnType<typeof removeTodolistAC>
@@ -81,6 +82,7 @@ export const fetchTodoListsThunk = (): AppThunk =>
         dispatch(setAppStatus('loading'))
         const todoLists = await todoListsAPI.getTodoLists()
         dispatch(setTodoListsAC(todoLists))
+        todoLists.forEach(todoList => dispatch(fetchTaskThunk(todoList.id)))
         dispatch(setAppStatus('succeeded'))
       } catch (e) {
         console.warn(e)

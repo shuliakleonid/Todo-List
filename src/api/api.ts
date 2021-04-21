@@ -39,7 +39,7 @@ export type UpdateTaskModelType = {
   startDate: string
   deadline: string
 }
-type ResponseType<T> = {
+export type ResponseType<T> = {
   resultCode: number
   messages: Array<string>
   data: T
@@ -58,7 +58,7 @@ type UpdateTaskType = {
   deadline: string
 }
 
-const instance = axios.create({
+export const instance = axios.create({
   baseURL: 'https://social-network.samuraijs.com/api/1.1/',
   withCredentials: true,
   headers: {
@@ -90,5 +90,6 @@ export const todoListsAPI = {
   },
   updateTask(todoListId: string, taskId: string, title: UpdateTaskModelType) {
     return instance.put<UpdateTaskType>(`todo-lists/${todoListId}/tasks/${taskId}`, {title}).then(res => res.data)
-  }
+  },
+
 }

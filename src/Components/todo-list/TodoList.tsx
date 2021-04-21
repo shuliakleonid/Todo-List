@@ -27,10 +27,10 @@ type TodoListPropsType = {
 
 const TodoList = React.memo((props: TodoListPropsType) => {
   const dispatch = useDispatch()
-
-  useEffect(() => {
-    dispatch(fetchTaskThunk(props.id))
-  }, [dispatch, props.id])
+  console.log(props.enentityStatus)
+  // useEffect(() => {
+  //   dispatch(fetchTaskThunk(props.id))
+  // }, [dispatch, props.id])
 
 
   let tasksForTodoList = props.tasks
@@ -58,6 +58,7 @@ const TodoList = React.memo((props: TodoListPropsType) => {
   }
 
   const tasks = tasksForTodoList.map(task => <Task
+      disabled={props.enentityStatus === 'loading'}
       key={v1()}
       task={task}
       todoListId={props.id}
