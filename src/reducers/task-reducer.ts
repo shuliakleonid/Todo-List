@@ -1,4 +1,4 @@
-import {addTodolistAC, changeTodolistEntityStatus, removeTodolistAC, setTodoListsAC} from './tl-reducer';
+import {addTodolistAC, removeTodolistAC, setTodoListsAC} from './tl-reducer';
 import {ACTIONS_TYPE} from '../constants';
 import {TaskStatuses, TaskType, todoListsAPI, UpdateTaskModelType} from '../api/api';
 import {AppRootStateType, AppThunk} from '../state/store';
@@ -22,6 +22,7 @@ export type TaskActionType =
     | ReturnType<typeof setTodoListsAC>
 
 const initialState: TasksStateType = {}
+
 export const tasksReducer = (state = initialState, action: TaskActionType): TasksStateType => {
   switch (action.type) {
     case ACTIONS_TYPE.SET_TASK: {
@@ -137,7 +138,6 @@ export const setTask = (todoID: string, title: string): AppThunk =>
         debugger
         if (task.resultCode === ResultResponseCodes.success) {
           dispatch(addTaskAC((task.data.item)))
-          // dispatch(setAppStatus('succeeded'))
         } else {
           if (task.messages.length) {
             dispatch(setError(task.messages[0]))
@@ -173,7 +173,6 @@ export const updateStatusTask = (todoID: string, taskId: string, status: TaskSta
           await todoListsAPI.updateTask(todoID, taskId, model)
           dispatch(changeTaskStatusAC(status, todoID, taskId))
           dispatch(setAppStatus('succeeded'))
-
         } catch (e) {
           console.warn(e)
         }

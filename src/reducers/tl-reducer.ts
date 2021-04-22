@@ -72,10 +72,7 @@ export const setTodoListsAC = (todoLists: Array<TodolistType>) => ({
   type: ACTIONS_TYPE.SET_TODOS,
   payload: todoLists
 }) as const
-
 export const changeTodolistEntityStatus = (todoListId:string,status:RequestStatusType) => ({type: ACTIONS_TYPE.CHANGE_TODOLIST_ENTITY_STATUS,todoListId,status}) as const
-
-
 export const fetchTodoListsThunk = (): AppThunk =>
     async (dispatch) => {
       try {
@@ -128,7 +125,6 @@ export const addTodoList = (title: string): AppThunk =>
         dispatch(setAppStatus('succeeded'))
       }
     }
-
 export const updateTodoList = (todoID: string, title: string): AppThunk =>
     async (dispatch) => {
       try {

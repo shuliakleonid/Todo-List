@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback} from 'react';
 import {AddItemForm} from '../add-item-form/AddItemForm';
 import {EditableSpan} from '../editable-span/EditableSpan';
 import {Button, IconButton, List, Paper} from '@material-ui/core';
@@ -8,7 +8,7 @@ import {v1} from 'uuid';
 import {TaskStatuses, TaskType} from '../../api/api';
 import {useDispatch} from 'react-redux';
 import {FilterValuesType, setRemoveTodoList, updateTodoList} from '../../reducers/tl-reducer';
-import {fetchTaskThunk, setTask} from '../../reducers/task-reducer';
+import {setTask} from '../../reducers/task-reducer';
 import {RequestStatusType} from '../../reducers/app-reducer';
 
 type TodoListPropsType = {
@@ -27,12 +27,6 @@ type TodoListPropsType = {
 
 const TodoList = React.memo((props: TodoListPropsType) => {
   const dispatch = useDispatch()
-  console.log(props.enentityStatus)
-  // useEffect(() => {
-  //   dispatch(fetchTaskThunk(props.id))
-  // }, [dispatch, props.id])
-
-
   let tasksForTodoList = props.tasks
   if (props.filter === 'active') {
     tasksForTodoList = props.tasks.filter(t => t.status === TaskStatuses.New)
@@ -40,23 +34,18 @@ const TodoList = React.memo((props: TodoListPropsType) => {
   if (props.filter === 'completed') {
     tasksForTodoList = props.tasks.filter(t => t.status === TaskStatuses.Completed)
   }
-
   const buttonValue = useCallback((event: any) => {
     props.changeFilter(event.currentTarget.textContent, props.id)
   }, [props])
-
   const changeTodoListNewTitle = useCallback((title: string) => {
     dispatch(updateTodoList(props.id, title))
   }, [props.id, dispatch])
-
   const addTask = useCallback((title: string) => {
     dispatch(setTask(props.id, title))
   }, [props.id, dispatch])
-
   const removeTodolist = () => {
     dispatch(setRemoveTodoList(props.id))
   }
-
   const tasks = tasksForTodoList.map(task => <Task
       disabled={props.enentityStatus === 'loading'}
       key={v1()}

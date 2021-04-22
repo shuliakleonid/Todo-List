@@ -3,7 +3,7 @@ import TodoList from '../../Components/todo-list/TodoList';
 import {AddItemForm} from '../../Components/add-item-form/AddItemForm';
 import {
   AppBar,
-  Button, CircularProgress,
+  Button,
   Container,
   Grid,
   IconButton,
@@ -36,7 +36,7 @@ export const Dashboard = () => {
   const todoLists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todoLists)
   const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
   const {status} = useSelector<AppRootStateType, AppStateType>(state => state.app)
-  const {isLoggedIn,isInitialized} = useSelector<AppRootStateType, AuthStateType>(state => state.auth)
+  const {isLoggedIn } = useSelector<AppRootStateType, AuthStateType>(state => state.auth)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -78,12 +78,12 @@ export const Dashboard = () => {
   if (!isLoggedIn) {
     return <Redirect to={'/login'}/>
   }
-  if (!isInitialized) {
-    return <div
-        style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
-      <CircularProgress/>
-    </div>
-  }
+  // if (!isInitialized) {
+  //   return <div
+  //       style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
+  //     <CircularProgress/>
+  //   </div>
+  // }
 
   return (
       <div className="App">

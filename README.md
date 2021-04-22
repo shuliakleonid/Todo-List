@@ -6,6 +6,7 @@ This is Todo App with login and API
 #### __In this project I do:__
 - cover code with tests
 - use Storybook
+- for validation use Formic
 - fetching data with REST API
 - use testing library
 - build app with all CRUD operations
@@ -50,6 +51,7 @@ export const todoListsAPI = {
 - Redux Thunk
 - Typescript
 - Axios
+- Formic
 - Storybook
 - Units tests
 - Jest testing

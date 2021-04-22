@@ -10,7 +10,6 @@ export const AddItemForm = React.memo((props: AddItemFormType) => {
   const [valueTodo, setValueTodo] = useState('')
   const [error, setError] = useState<string | null>(null)
 
-
   const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
     setValueTodo(event.target.value)
     setError(null)
@@ -23,7 +22,6 @@ export const AddItemForm = React.memo((props: AddItemFormType) => {
       setError('Error write name!')
     }
   }
-
   const onKeyPressHandler = (event: KeyboardEvent<HTMLInputElement>): void => {
     if (error !== null) {
       setError(null);
