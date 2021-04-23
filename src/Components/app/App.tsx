@@ -1,15 +1,19 @@
-import React from 'react';
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import React, {useEffect} from 'react';
+import {Route, Switch} from 'react-router-dom';
 import {Login} from '../../pages/login/Login';
 import NotFound from '../../pages/not-found/not-found';
 import {Dashboard} from '../../pages/dashboard/Dashboard'
+import {AuthStateType, initializeApp} from '../../reducers/auth-reducer';
+import {useDispatch, useSelector} from 'react-redux';
 import {CircularProgress} from '@material-ui/core';
-import {useSelector} from 'react-redux';
 import {AppRootStateType} from '../../state/store';
-import {AuthStateType} from '../../reducers/auth-reducer';
 
 
 const App = () => {
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(initializeApp())
+  }, [])
   const {isInitialized} = useSelector<AppRootStateType, AuthStateType>(state => state.auth)
   if (!isInitialized) {
     return <div
@@ -18,13 +22,11 @@ const App = () => {
     </div>
   }
   return (
-      <Router>
-        <Switch>
-          <Route exact path={'/'} render={() => <Dashboard/>}/>
-          <Route path={'/login'} render={() => <Login/>}/>
-          <Route  render={() => <NotFound/>}/>
-        </Switch>
-      </Router>
+      <Switch>
+        <Route exact path={'/'} render={() => <Dashboard/>}/>
+        <Route path={'/login'} render={() => <Login/>}/>
+        <Route render={() => <NotFound/>}/>
+      </Switch>
   );
 };
 

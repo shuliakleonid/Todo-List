@@ -29,7 +29,6 @@ export const Task = React.memo((props: TaskPropsType) => {
     props.changeTaskTitle(props.task.id, newValue, props.todoListId)
   }, [props]);
 
-  console.log(props.disabled)
   return (
       <ListItem key={props.task.id} className={props.task.status === TaskStatuses.Completed ? s.done : ''}>
         <ListItemIcon>

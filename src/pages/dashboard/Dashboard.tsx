@@ -28,7 +28,7 @@ import {TaskStatuses, TaskType} from '../../api/api';
 import {AppStateType} from '../../reducers/app-reducer';
 import {ErrorSnackbar} from '../../Components/error-snackbars/ErrorSnackbar';
 import {NavLink, Redirect} from 'react-router-dom';
-import {AuthStateType, initializeApp, setIsLoggedIn} from '../../reducers/auth-reducer';
+import {AuthStateType, logOut} from '../../reducers/auth-reducer';
 
 export type TasksStateType = { [key: string]: Array<TaskType> }
 
@@ -36,11 +36,10 @@ export const Dashboard = () => {
   const todoLists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todoLists)
   const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
   const {status} = useSelector<AppRootStateType, AppStateType>(state => state.app)
-  const {isLoggedIn } = useSelector<AppRootStateType, AuthStateType>(state => state.auth)
+  const {isLoggedIn,isInitialized} = useSelector<AppRootStateType, AuthStateType>(state => state.auth)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(initializeApp())
     dispatch(fetchTodoListsThunk())
     if (!isLoggedIn) {
       return
@@ -72,19 +71,13 @@ export const Dashboard = () => {
   }, [dispatch])
 
   const handleLogOut = () => {
-    dispatch(setIsLoggedIn(false))
+   dispatch(logOut())
+    // dispatch(setIsLoggedIn(false))//todo вылогирование
   }
 
   if (!isLoggedIn) {
     return <Redirect to={'/login'}/>
   }
-  // if (!isInitialized) {
-  //   return <div
-  //       style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
-  //     <CircularProgress/>
-  //   </div>
-  // }
-
   return (
       <div className="App">
         <ErrorSnackbar/>
@@ -97,7 +90,8 @@ export const Dashboard = () => {
             <Typography variant="h3">
               Todo
             </Typography>
-            <Button onClick={handleLogOut} color="inherit"><NavLink to="/login">Login</NavLink></Button>
+            {isLoggedIn && <Button onClick={handleLogOut} color="inherit"><NavLink to="/login">Log out</NavLink></Button>}
+            {/*<Button onClick={handleLogOut} color="inherit"><NavLink to="/login">Login</NavLink></Button>*/}
           </Toolbar>
         </AppBar>
         <Container fixed>

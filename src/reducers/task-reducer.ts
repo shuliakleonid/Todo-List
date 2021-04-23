@@ -4,6 +4,7 @@ import {TaskStatuses, TaskType, todoListsAPI, UpdateTaskModelType} from '../api/
 import {AppRootStateType, AppThunk} from '../state/store';
 import {TasksStateType} from '../pages/dashboard/Dashboard';
 import {setAppStatus, setError} from './app-reducer';
+import {handleServerAppError, handleServerNetworkError} from '../utils/error-utils';
 
 export enum ResultResponseCodes {
   success = 0,
@@ -113,9 +114,8 @@ export const fetchTaskThunk = (todoId: string): AppThunk =>
         const tasks = await todoListsAPI.getTasks(todoId)
         dispatch(setTaskAC(tasks.items, todoId))
         dispatch(setAppStatus('succeeded'))
-
       } catch (e) {
-        console.warn(e)
+        handleServerNetworkError(e, dispatch)
       }
     }
 export const setRemoveTask = (todoID: string, taskId: string): AppThunk =>
@@ -125,7 +125,7 @@ export const setRemoveTask = (todoID: string, taskId: string): AppThunk =>
         await todoListsAPI.deleteTask(todoID, taskId)
         dispatch(removeTaskAC(todoID, taskId))
       } catch (e) {
-        console.warn(e)
+        handleServerNetworkError(e, dispatch)
       }finally {
         dispatch(setAppStatus('succeeded'))
       }
@@ -135,19 +135,13 @@ export const setTask = (todoID: string, title: string): AppThunk =>
       try {
         dispatch(setAppStatus('loading'))
         const task = await todoListsAPI.createTask(todoID, title)
-        debugger
         if (task.resultCode === ResultResponseCodes.success) {
           dispatch(addTaskAC((task.data.item)))
         } else {
-          if (task.messages.length) {
-            dispatch(setError(task.messages[0]))
-          } else {
-            dispatch(setError('Some error occurred'))
-          }
+          handleServerAppError(task, dispatch);
         }
-      } catch (err) {
-        dispatch(setError(err.message))
-        // console.warn(e)
+      } catch (error) {
+        handleServerNetworkError(error, dispatch)
       } finally {
         dispatch(setAppStatus('succeeded'))
       }
@@ -170,11 +164,15 @@ export const updateStatusTask = (todoID: string, taskId: string, status: TaskSta
         }
         try {
           dispatch(setAppStatus('loading'))
-          await todoListsAPI.updateTask(todoID, taskId, model)
+          const response = await todoListsAPI.updateTask(todoID, taskId, model)
+          if (response.resultCode === 0) {
           dispatch(changeTaskStatusAC(status, todoID, taskId))
           dispatch(setAppStatus('succeeded'))
+          }else{
+            handleServerAppError(response, dispatch);
+          }
         } catch (e) {
-          console.warn(e)
+          handleServerNetworkError(e, dispatch)
         }
       }
     }

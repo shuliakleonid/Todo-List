@@ -1,5 +1,5 @@
 import React from 'react'
-import {Button, Checkbox, FormControlLabel, Grid, makeStyles, TextField} from '@material-ui/core'
+import {Button, Checkbox, CircularProgress, FormControlLabel, Grid, makeStyles, TextField} from '@material-ui/core'
 import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Link from '@material-ui/core/Link';
@@ -7,10 +7,10 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import {useFormik} from 'formik';
-import {login} from '../../reducers/auth-reducer';
+import {AuthStateType, login} from '../../reducers/auth-reducer';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../../state/store';
-import { Redirect } from 'react-router-dom';
+import {Redirect} from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -40,14 +40,15 @@ type FormikErrorType = {
 
 export const Login = () => {
   const classes = useStyles();
-const dispatch = useDispatch()
-const isLoggedIn = useSelector<AppRootStateType,boolean>(state=>state.auth.isLoggedIn)
+  const dispatch = useDispatch()
+  const {isLoggedIn,isInitialized} = useSelector<AppRootStateType, AuthStateType>(state => state.auth)
 
-  const {handleChange, handleSubmit,handleBlur, values,errors,touched,resetForm} = useFormik({
+  const {handleChange, handleSubmit, values, errors, touched, resetForm, getFieldProps} = useFormik({
     initialValues: {
       email: '',
       password: '',
-      rememberMe: false
+      rememberMe: false,
+
     },
     validate: (values) => {
       const errors: FormikErrorType = {};
@@ -56,25 +57,25 @@ const isLoggedIn = useSelector<AppRootStateType,boolean>(state=>state.auth.isLog
       } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
         errors.email = 'Invalid email address';
       }
-      if(values.password.length>4){
-        // errors.password = 'Required';
-      }else {
+      if (!values.password) {
+        errors.password = 'Required';
+      } else if (values.password.length < 3) {
         errors.password = 'Password must be longer';
       }
       return errors;
     },
     onSubmit: values => {
-      resetForm()
       dispatch(login(values))
+      resetForm()
     }
   })
 
   const errorEmail = !!(touched.email && errors.email)
   const errorPassword = !!(touched.password && errors.password)
 
-if (isLoggedIn){
- return  <Redirect to={'/'}/>
-}
+  if (isLoggedIn) {
+    return <Redirect to={'/'}/>
+  }
   return (
       <Container component="main" maxWidth="xs">
         <CssBaseline/>
@@ -88,19 +89,20 @@ if (isLoggedIn){
           <form className={classes.form} onSubmit={handleSubmit}>
             <TextField
                 error={errorEmail && !!errors.email}
-                onBlur={handleBlur}
                 variant="outlined"
                 margin="normal"
                 id="email"
                 label="Email Address"
                 name="email"
                 autoComplete="email"
-                onChange={handleChange}
+                // onChange={handleChange}
+                // onBlur={handleBlur}
+                // value={values.email}
                 helperText={errorEmail && errors.email}
-                value={values.email}
                 required
                 fullWidth
                 autoFocus
+                {...getFieldProps('email')}
             />
             <TextField
                 error={errorPassword}
@@ -111,15 +113,17 @@ if (isLoggedIn){
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                onChange={handleChange}
-                onBlur={handleBlur}
+                // onChange={handleChange}
+                // onBlur={handleBlur}
+                // value={values.password}
                 helperText={errorPassword && errors.password}
-                value={values.password}
                 required
                 fullWidth
+                {...getFieldProps('password')}
             />
             <FormControlLabel
-                control={<Checkbox  name="rememberMe" value={values.rememberMe} onChange={handleChange} color="primary"/>}
+                control={<Checkbox name="rememberMe" value={values.rememberMe} onChange={handleChange}
+                                   color="primary"/>}
                 label="Remember me"
             />
             <Button

@@ -3,7 +3,8 @@ import {instance,ResponseType} from './api'
 export type LoginDataType ={
   email:string
   password:string
-  rememberMe:boolean
+  rememberMe?:boolean
+  captcha?: string
 }
 type AuthType = {
   id:number
@@ -12,13 +13,13 @@ type AuthType = {
 }
 export const authAPI = {
   login(data:LoginDataType) {
-    return instance.post<ResponseType<{}>>('auth/login',{...data}).then(r=>r.data)
+    return instance.post<ResponseType>('auth/login',data).then(r=>r.data)
   },
   me(){
     return instance.get<ResponseType<AuthType>>('auth/me').then(r=>r.data)
   },
   logOut(){
-    return instance.delete('auth/login')
+    return instance.delete<ResponseType>('auth/login').then(r=>r.data)
   }
 
 }

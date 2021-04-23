@@ -4,6 +4,7 @@ import {AppThunk} from '../state/store';
 import {todoListsAPI, TodolistType} from '../api/api';
 import {RequestStatusType, setAppStatus, setError} from './app-reducer';
 import {fetchTaskThunk} from './task-reducer';
+import {handleServerAppError, handleServerNetworkError} from '../utils/error-utils';
 
 export type TodoListActionType =
     ReturnType<typeof removeTodolistAC>
@@ -82,7 +83,8 @@ export const fetchTodoListsThunk = (): AppThunk =>
         todoLists.forEach(todoList => dispatch(fetchTaskThunk(todoList.id)))
         dispatch(setAppStatus('succeeded'))
       } catch (e) {
-        console.warn(e)
+        handleServerNetworkError(e, dispatch)
+
       }
     }
 export const setRemoveTodoList = (todoID: string): AppThunk =>
@@ -95,7 +97,8 @@ export const setRemoveTodoList = (todoID: string): AppThunk =>
 
 
       } catch (e) {
-        console.warn(e)
+        handleServerNetworkError(e, dispatch)
+
       }finally {
         dispatch(setAppStatus('succeeded'))
       }
@@ -108,19 +111,14 @@ export const addTodoList = (title: string): AppThunk =>
         const todolist = await todoListsAPI.createTodoLists(title)
         // dispatch(addTodolistAC(todolist.data.item.title, todolist.data.item.id))
         if (todolist.resultCode === 0) {
-          debugger
           dispatch(addTodolistAC(todolist.data.item.title, todolist.data.item.id))
           // dispatch(setAppStatus('succeeded'))
         } else {
-          if (todolist.messages.length) {
-            dispatch(setError(todolist.messages[0]))
-          } else {
-            dispatch(setError('Some error occurred'))
-          }
+          handleServerAppError(todolist, dispatch);
         }
       } catch (e) {
-        dispatch(setError(e))
-        // console.warn(e)
+        handleServerNetworkError(e, dispatch)
+
       } finally {
         dispatch(setAppStatus('succeeded'))
       }
@@ -130,10 +128,9 @@ export const updateTodoList = (todoID: string, title: string): AppThunk =>
       try {
         dispatch(setAppStatus('loading'))
         await todoListsAPI.updateTodoLists(todoID, title)
-
         dispatch(changeTitleTodolistAC(todoID, title))
         dispatch(setAppStatus('succeeded'))
       } catch (e) {
-        console.warn(e)
+        handleServerNetworkError(e, dispatch)
       }
     }
