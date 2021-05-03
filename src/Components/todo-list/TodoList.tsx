@@ -17,7 +17,7 @@ type TodoListPropsType = {
   tasks: Array<TaskType>
   filter: FilterValuesType
   enentityStatus: RequestStatusType
-  remove: (id: string, todoListId: string) => void
+  removeTask: (id: string, todoListId: string) => void
   addTask: (value: string, todoListId: string) => void
   changeTodoListNewTitle: (id: string, newTitle: string) => void
   changeFilter: (value: FilterValuesType, todoListId: string) => void
@@ -26,7 +26,7 @@ type TodoListPropsType = {
 }
 
 const TodoList = React.memo((props: TodoListPropsType) => {
-  console.log(props.enentityStatus);
+  console.log(props,'TODOList')
   const dispatch = useDispatch()
   let tasksForTodoList = props.tasks
   if (props.filter === 'active') {
@@ -47,11 +47,13 @@ const TodoList = React.memo((props: TodoListPropsType) => {
   const removeTodolist = () => {
     dispatch(setRemoveTodoList(props.id))
   }
+  debugger
   const tasks = tasksForTodoList.map(task => <Task
       disabled={props.enentityStatus === 'loading'}
       key={v1()}
       task={task}
       todoListId={props.id}
+      removeTask={props.removeTask}
       changeTaskStatus={props.changeTaskStatus}
       changeTaskTitle={props.changeTaskTitle}
   />)

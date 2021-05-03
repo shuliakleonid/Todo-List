@@ -21,7 +21,7 @@ import {
   FilterValuesType,
   TodolistDomainType
 } from '../../reducers/tl-reducer';
-import {removeTaskAC, setTask, updateStatusTask, updateTaskAC} from '../../reducers/task-reducer';
+import {setRemoveTask, setTask, updateTask} from '../../reducers/task-reducer';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../../state/store';
 import {TaskStatuses, TaskType} from '../../api/api';
@@ -33,8 +33,10 @@ import {AuthStateType, logOut} from '../../reducers/auth-reducer';
 export type TasksStateType = { [key: string]: Array<TaskType> }
 
 export const Dashboard = () => {
+  console.log('DASh')
   const todoLists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todoLists)
   const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
+  console.log(tasks,'Task')
   const {status} = useSelector<AppRootStateType, AppStateType>(state => state.app)
   const {isLoggedIn, isInitialized} = useSelector<AppRootStateType, AuthStateType>(state => state.auth)
   const dispatch = useDispatch()
@@ -49,19 +51,17 @@ export const Dashboard = () => {
   const changeTodoListNewTitle = useCallback((todolistId: string, title: string) => {
     dispatch(changeTitleTodolistAC({todolistId, title}))
   }, [dispatch])
-
-
   const addTask = useCallback((title: string, todoListId: string): void => {
     dispatch(setTask(title, todoListId))
   }, [dispatch])
   const changeStatus = useCallback((id: string, status: TaskStatuses, todolistId: string): void => {
-    dispatch(updateStatusTask(todolistId, id, status))
+    dispatch(updateTask(id, todolistId, {status}))
   }, [dispatch])
   const changeTaskTitle = useCallback((id: string, newTitle: string, todoListId: string): void => {
-    dispatch(updateTaskAC({taskId:id, todolistId:todoListId, model:}))
+    dispatch(updateTask(id, todoListId, {title: newTitle})) // todo не понятно почему  тип any
   }, [dispatch])
   const removeTask = useCallback((id: string, todoListId: string) => {
-    dispatch(removeTaskAC({id, todolistId:todoListId}))
+    dispatch(setRemoveTask(id, todoListId))
   }, [dispatch])
   const changeFilter = useCallback((value: FilterValuesType, todolistId: string) => {
     dispatch(changeFilterTodolistAC({todolistId, filter: value}))
@@ -112,7 +112,7 @@ export const Dashboard = () => {
                             filter={t.filter}
                             enentityStatus={t.entityStatus}
                             addTask={addTask}
-                            remove={removeTask}
+                            removeTask={removeTask}
                             tasks={tasksForTodoList}
                             changeFilter={changeFilter}
                             changeTaskStatus={changeStatus}

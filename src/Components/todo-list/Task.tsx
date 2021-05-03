@@ -4,26 +4,21 @@ import s from './todoList.module.css';
 import {EditableSpan} from '../editable-span/EditableSpan';
 import {Delete} from '@material-ui/icons';
 import {TaskStatuses, TaskType} from '../../api/api';
-import {useDispatch} from 'react-redux';
-import {setRemoveTask} from '../../reducers/task-reducer';
 
 export type TaskPropsType = {
-  disabled:boolean
+  disabled: boolean
   task: TaskType
   todoListId: string
+  removeTask: (id: string, todoListId: string) => void
   changeTaskTitle: (id: string, newValue: string, todoListId: string) => void
   changeTaskStatus: (id: string, status: TaskStatuses, todolistId: string) => void
 }
 export const Task = React.memo((props: TaskPropsType) => {
-
-  const dispatch = useDispatch()
-
+  console.log(props,'Task')
   const onChangeCheckbox = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     let newIsDoneValue = e.currentTarget.checked
     props.changeTaskStatus(props.task.id, newIsDoneValue ? TaskStatuses.Completed : TaskStatuses.New, props.todoListId)
   }, [props]);
-
-  const removeHandler = useCallback(() => dispatch(setRemoveTask(props.todoListId, props.task.id)), [props.todoListId, props.task.id,dispatch]);
 
   const onChangeTitleHandler = useCallback((newValue: string) => {
     props.changeTaskTitle(props.task.id, newValue, props.todoListId)
@@ -39,7 +34,7 @@ export const Task = React.memo((props: TaskPropsType) => {
         <ListItemText>
           <EditableSpan title={props.task.title} onChange={onChangeTitleHandler}/>
         </ListItemText>
-        <IconButton onClick={removeHandler} disabled={props.disabled}>
+        <IconButton onClick={() => props.removeTask(props.task.id, props.todoListId)} disabled={props.disabled}>
           <Delete/>
         </IconButton>
       </ListItem>
