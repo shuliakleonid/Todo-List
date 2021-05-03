@@ -21,7 +21,7 @@ import {
   FilterValuesType,
   TodolistDomainType
 } from '../../reducers/tl-reducer';
-import {changeTaskTitleAC, removeTaskAC, setTask, updateStatusTask} from '../../reducers/task-reducer';
+import {removeTaskAC, setTask, updateStatusTask, updateTaskAC} from '../../reducers/task-reducer';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../../state/store';
 import {TaskStatuses, TaskType} from '../../api/api';
@@ -36,7 +36,7 @@ export const Dashboard = () => {
   const todoLists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todoLists)
   const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
   const {status} = useSelector<AppRootStateType, AppStateType>(state => state.app)
-  const {isLoggedIn,isInitialized} = useSelector<AppRootStateType, AuthStateType>(state => state.auth)
+  const {isLoggedIn, isInitialized} = useSelector<AppRootStateType, AuthStateType>(state => state.auth)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -44,10 +44,10 @@ export const Dashboard = () => {
     if (!isLoggedIn) {
       return
     }
-  }, [dispatch,isLoggedIn])
+  }, [dispatch, isLoggedIn])
 
   const changeTodoListNewTitle = useCallback((todolistId: string, title: string) => {
-    dispatch(changeTitleTodolistAC(todolistId, title))
+    dispatch(changeTitleTodolistAC({todolistId, title}))
   }, [dispatch])
 
 
@@ -58,20 +58,20 @@ export const Dashboard = () => {
     dispatch(updateStatusTask(todolistId, id, status))
   }, [dispatch])
   const changeTaskTitle = useCallback((id: string, newTitle: string, todoListId: string): void => {
-    dispatch(changeTaskTitleAC(id, todoListId, newTitle))
+    dispatch(updateTaskAC({taskId:id, todolistId:todoListId, model:}))
   }, [dispatch])
   const removeTask = useCallback((id: string, todoListId: string) => {
-    dispatch(removeTaskAC(id, todoListId))
+    dispatch(removeTaskAC({id, todolistId:todoListId}))
   }, [dispatch])
   const changeFilter = useCallback((value: FilterValuesType, todolistId: string) => {
-    dispatch(changeFilterTodolistAC(todolistId, value))
+    dispatch(changeFilterTodolistAC({todolistId, filter: value}))
   }, [dispatch])
   const addTodoListClick = useCallback((title: string) => {
     dispatch(addTodoList(title))
   }, [dispatch])
 
   const handleLogOut = () => {
-   dispatch(logOut())
+    dispatch(logOut())
     // dispatch(setIsLoggedIn(false))//todo вылогирование
   }
 
@@ -90,7 +90,8 @@ export const Dashboard = () => {
             <Typography variant="h3">
               Todo
             </Typography>
-            {isLoggedIn && <Button onClick={handleLogOut} color="inherit"><NavLink to="/login">Log out</NavLink></Button>}
+            {isLoggedIn &&
+            <Button onClick={handleLogOut} color="inherit"><NavLink to="/login">Log out</NavLink></Button>}
             {/*<Button onClick={handleLogOut} color="inherit"><NavLink to="/login">Login</NavLink></Button>*/}
           </Toolbar>
         </AppBar>

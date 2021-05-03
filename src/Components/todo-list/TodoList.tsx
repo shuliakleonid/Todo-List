@@ -26,6 +26,7 @@ type TodoListPropsType = {
 }
 
 const TodoList = React.memo((props: TodoListPropsType) => {
+  console.log(props.enentityStatus);
   const dispatch = useDispatch()
   let tasksForTodoList = props.tasks
   if (props.filter === 'active') {
