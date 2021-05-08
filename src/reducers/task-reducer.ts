@@ -33,9 +33,7 @@ const slice = createSlice({
       let todolistTask = state[action.payload.todolistId]
       const index = todolistTask.findIndex(tk => tk.id === action.payload.id)
       if (index !== -1) {
-        debugger
         todolistTask.splice(index, 1)
-        debugger
       }
     },
     addTaskAC(state, action: PayloadAction<{ task: TaskType }>) {
@@ -64,8 +62,20 @@ const slice = createSlice({
         state[tl.id] = []
       })
     });
-  }
-  // extraReducers:{
+  },
+  // extraReducers: (builder) => {
+  //   builder.addCase(setTodoListsTC.fulfilled, (state, action) => {
+  //     if (action.payload) {
+  //       return action.payload.todoLists.map((tl: TodoListType) => ({
+  //         ...tl,
+  //         filter: 'all',
+  //         entityStatus: 'idle',
+  //         disabled: false
+  //       }))
+  //     }
+  //   })
+
+    // extraReducers:{
   //   [addTodolistAC.type]:(state, action: PayloadAction<{}>)=>{},
   //   [removeTodolistAC.type]:(state, action: PayloadAction<{}>)=>{},
   //   [setTodoListsAC.type]:(state, action: PayloadAction<{}>)=>{},

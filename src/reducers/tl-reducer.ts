@@ -23,7 +23,7 @@ export type TodolistDomainType = TodolistType & {
   entityStatus: RequestStatusType
 }
 
-const initialState: Array<TodolistDomainType> = []
+const initialState: TodolistDomainType[] = []
 
 const slice = createSlice({
   name: 'todoList',

@@ -30,6 +30,8 @@ export const authReducer = slice.reducer;
 export const {setIsLoggedIn, setInitialized} = slice.actions
 
 export type AuthStateType = typeof initialState
+
+
 // export const authReducer = (state: AuthStateType = initialState, action: AuthActionType): AuthStateType => {
 //   switch (action.type) {
 //     case ACTIONS_TYPE.SET_IS_LOGGED_IN:
@@ -42,6 +44,10 @@ export type AuthStateType = typeof initialState
 // }
 // export const setIsLoggedIn = (value: boolean) => ({type: ACTIONS_TYPE.SET_IS_LOGGED_IN, value}) as const
 // export const setInitialized = (value: boolean) => ({type: ACTIONS_TYPE.SET_IS_INITIALIZED, value}) as const
+
+
+
+
 export const login = (data: LoginDataType): AppThunk =>
     async (dispatch) => {
       try {
